@@ -204,7 +204,7 @@ class FairBaseReport(object):
             'Created': str(datetime.datetime.now()).partition('.')[0],
             'PyFair Version': VERSION,
             'Type': type(self).__name__
-        }).to_frame().to_html(border=0, header=None, justify='left', classes='fair_metadata_table')
+        }).to_frame().to_html(border=0, header=False, justify='left', classes='fair_metadata_table')
         return metadata
 
     def _get_tree(self, model):
