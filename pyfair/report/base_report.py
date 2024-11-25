@@ -339,8 +339,12 @@ class FairBaseReport(object):
             'stdev': risk_df.std(axis=1),
             'min'  : risk_df.min(axis=1),
             'max'  : risk_df.max(axis=1),
+            'geo_mean': risk_df.apply(lambda x: np.exp(np.mean(np.log(x[x > 0]))), axis=1),
+            'mode': risk_df.mode(axis=1)[0],
+            '90th_percentile': risk_df.quantile(0.90, axis=1),
+            '99th_percentile': risk_df.quantile(0.99, axis=1)
         })
-        # Format the risk DF with the appropraite strings
+        # Format the risk DF with the appropriate strings
         risk_df = risk_df.apply(
             lambda row: pd.Series(
                 [self._format_strings['Risk'].format(item) for item in row],
