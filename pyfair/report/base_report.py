@@ -288,7 +288,7 @@ class FairBaseReport(object):
             # If the column is not present in param_df
             if column not in param_df.columns:
                 # Add that column in with null data
-                param_df[column] = np.NaN
+                param_df[column] = np.nan
         # Create descriptive statistics from parameter df
         param_df = param_df[self._param_cols]
         param_df['mean'] = model.export_results().mean(axis=0)
