@@ -207,7 +207,7 @@ class FairMetaModel(object):
         self._risk_table['Risk'] = sum_vector
         # Check for NaN values in sum_vector
         if pd.isnull(sum_vector).any():
-            raise FairException('np.NaN values in summed Risk column.' 
+            raise FairException('np.nan values in summed Risk column.' 
                                 ' Likely cause: n_simulations mismatch across models.')
         return self
 
