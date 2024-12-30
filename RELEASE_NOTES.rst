@@ -1,6 +1,14 @@
 Release Notes
 =============
 
+Version 0.1-alpha.13
+--------------------
+
+* Updated package metadata and dependencies
+* Improved package classifiers
+* Changed requires to install_requires for better dependency management
+* Added Python version requirement (>=3.6)
+
 Version 0.1-alpha.12
 --------------------
 

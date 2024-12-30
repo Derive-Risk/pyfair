@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pyfair",
-    version="0.1-alpha.12",
+    version="0.1-alpha.13",
     description="Open FAIR Monte Carlo creator",
     long_description="""
         Factor Analysis of Information Risk (Open FAIR) model in Python.
@@ -19,7 +19,7 @@ setup(
 
     """,
     author="Hive Systems",
-    author_email="pyfair@hivesystems.io",
+    author_email="pyfair@hivesystems.com",
     packages=[
         "pyfair",
         "pyfair.model",
@@ -28,12 +28,15 @@ setup(
     ],
     license="MIT",
     url="https://github.com/Hive-Systems/pyfair",
-    keywords=["FAIR", "risk"],
+    keywords=["FAIR", "risk", "monte carlo", "cyber risk", "risk analysis"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Topic :: Security",
+        "Topic :: Scientific/Engineering :: Mathematics",
     ],
-    requires=[
+    install_requires=[
         "pandas",
         "numpy",
         "scipy",
@@ -42,4 +45,5 @@ setup(
     ],
     package_dir={"pyfair": "./pyfair"},
     package_data={"pyfair": ["./static/*"]},
+    python_requires=">=3.6",
 )
