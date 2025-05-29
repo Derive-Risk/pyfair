@@ -37,6 +37,7 @@ class FairDataInput(object):
             "Vulnerability",
             "Control Strength",
             "Threat Capability",
+            "Secondary Loss Event Frequency",
         ]
         self._le_1_keywords = ["constant", "high", "mode", "low", "mean"]
         # Parameter map associates parameters with functions

@@ -45,8 +45,8 @@ Multiply the Loss Event Frequency vector by the Loss Magnitude vector
 Example
 ~~~~~~~
 For a given year, if we have the number of times a particular event
-occurs (Loss Event Frequency/LEF) and the dollar losses associated with 
-each of those events (Loss Magnitude/LM), we can multiply these 
+occurs (Loss Event Frequency/LEF) and the dollar losses associated with
+each of those events (Loss Magnitude/LM), we can multiply these
 together to derive the ultimate dollar value amount lost (Risk/R).
 
 +------------+-----+--------+--------------+
@@ -64,7 +64,7 @@ together to derive the ultimate dollar value amount lost (Risk/R).
 
 Description
 ~~~~~~~~~~~
-A vector of elements which represent the number of times a particular 
+A vector of elements which represent the number of times a particular
 loss occurs during a given time frame (generally one year)
 
 Restrictions
@@ -119,7 +119,7 @@ multiply these together to derive the number of losses that will occur
 
 .. note::
 
-    Though intended to represent a discrete number of events, TEF and 
+    Though intended to represent a discrete number of events, TEF and
     LEF are not rounded to the nearest integer. This allows for
     the modeling of events that happen infrequently. For instance, if
     we are running a simulation for a single year, one might model a
@@ -130,7 +130,7 @@ multiply these together to derive the number of losses that will occur
 
 Description
 ~~~~~~~~~~~
-A vector of elements representing the number of times a particular 
+A vector of elements representing the number of times a particular
 threat occurs, whether or not it results in a loss
 
 Restrictions
@@ -139,7 +139,7 @@ All elements must be positive
 
 Derivation
 ~~~~~~~~~~
-Supplied directly, or multiply the Contact Frequency vector and the 
+Supplied directly, or multiply the Contact Frequency vector and the
 Probability of Action vector
 
 .. math::
@@ -312,8 +312,8 @@ a control (Vulnerability/V).
 
 Description
 ~~~~~~~~~~~
-A vector with elements representing the number of threat 
-actor contacts that could potentially yield a threat within a given 
+A vector with elements representing the number of threat
+actor contacts that could potentially yield a threat within a given
 timeframe
 
 Restrictions
@@ -332,7 +332,7 @@ attack, and in turn can potentially yield a loss (Contact Frequency/C).
 +------------+-----------+
 | Simulation | C         |
 +============+===========+
-| 1          | 5,000,000 | 
+| 1          | 5,000,000 |
 +------------+-----------+
 | 2          | 3,000,000 |
 +------------+-----------+
@@ -345,7 +345,7 @@ attack, and in turn can potentially yield a loss (Contact Frequency/C).
 Description
 ~~~~~~~~~~~
 A vector with elements representing the probability that a threat actor
-will proceed after coming into contact with an organization 
+will proceed after coming into contact with an organization
 
 Restrictions
 ------------
@@ -363,7 +363,7 @@ resource (Probability of Action/P)
 +------------+------+
 | Simulation | P    |
 +============+======+
-| 1          | 0.95 | 
+| 1          | 0.95 |
 +------------+------+
 | 2          | 0.90 |
 +------------+------+
@@ -375,7 +375,7 @@ resource (Probability of Action/P)
 
 Description
 ~~~~~~~~~~~
-A vector of unitless elements that describe the relative 
+A vector of unitless elements that describe the relative
 level of expertise and resources of a threat actor (relative to a
 Control Strength)
 
@@ -395,7 +395,7 @@ relates to the relative strength of the controls (Control Strength/CS)
 +------------+------+
 | Simulation | TC   |
 +============+======+
-| 1          | 0.75 | 
+| 1          | 0.75 |
 +------------+------+
 | 2          | 0.60 |
 +------------+------+
@@ -407,7 +407,7 @@ relates to the relative strength of the controls (Control Strength/CS)
 
 Description
 ~~~~~~~~~~~
-A vector of unitless elements that describe the relative strength of a 
+A vector of unitless elements that describe the relative strength of a
 given control (relative to the Threat Capability of a given actor)
 
 Restrictions
@@ -427,7 +427,7 @@ Capability/TC)
 +------------+------+
 | Simulation | TC   |
 +============+======+
-| 1          | 0.15 | 
+| 1          | 0.15 |
 +------------+------+
 | 2          | 0.10 |
 +------------+------+
@@ -514,7 +514,7 @@ Loss/PL)
 +------------+------------+
 | Simulation | PL         |
 +============+============+
-| 1          | $5,000,000 | 
+| 1          | $5,000,000 |
 +------------+------------+
 | 2          | $3,500,000 |
 +------------+------------+
@@ -540,43 +540,39 @@ multiplied together on an elementwise basis.
 
 .. math::
 
-    \begin{bmatrix} 
-            \text{SL}_{1} \\
-            \text{SL}_{1} \\
-            \vdots        \\
-            \text{SL}_{1} \\
-    \end{bmatrix}
-    \quad
-    =
-    \quad
-    \sum\limits^n_{j=1}
-    \quad
-    \left(
-        \quad
-        \begin{bmatrix} 
-                \text{SLEF}_{1,1} & \text{SLEF}_{1,2} & \dots  & \text{SLEF}_{1,n} \\
-                \text{SLEF}_{2,1} & \text{SLEF}_{2,2} & \dots  & \text{SLEF}_{2,n} \\
-                \vdots            & \vdots            & \ddots & \vdots \\
-                \text{SLEF}_{m,1} & \text{SLEF}_{m,2} & \dots  & \text{SLEF}_{m,n} \\
-        \end{bmatrix}
-        \quad
-        \circ
-        \quad
-        \begin{bmatrix} 
-                \text{SLEM}_{1,1} & \text{SLEM}_{1,2} & \dots  & \text{SLEM}_{1,n} \\
-                \text{SLEM}_{2,1} & \text{SLEM}_{2,2} & \dots  & \text{SLEM}_{2,n} \\
-                \vdots            & \vdots            & \ddots & \vdots \\
-                \text{SLEM}_{m,1} & \text{SLEM}_{m,2} & \dots  & \text{SLEM}_{m,n} \\
-        \end{bmatrix}
-        \quad
-    \right)
+    \\begin{split}
+        \\mathbf{SL} &=
+        \\sum_{j=1}^{n} \\left( \\mathbf{SLEF} \\circ \\mathbf{SLEM} \\right)_{rowwise} \\\\
+        \\text{where:} \\\\
+        \\mathbf{SLEF} &=
+        \\begin{bmatrix}
+                \\text{SLEF}_{1,1} & \\text{SLEF}_{1,2} & \\dots  & \\text{SLEF}_{1,n} \\\\
+                \\text{SLEF}_{2,1} & \\text{SLEF}_{2,2} & \\dots  & \\text{SLEF}_{2,n} \\\\
+                \\vdots            & \\vdots            & \\ddots & \\vdots \\\\
+                \\text{SLEF}_{m,1} & \\text{SLEF}_{m,2} & \\dots  & \\text{SLEF}_{m,n}
+        \\end{bmatrix} \\\\
+        \\mathbf{SLEM} &=
+        \\begin{bmatrix}
+                \\text{SLEM}_{1,1} & \\text{SLEM}_{1,2} & \\dots  & \\text{SLEM}_{1,n} \\\\
+                \\text{SLEM}_{2,1} & \\text{SLEM}_{2,2} & \\dots  & \\text{SLEM}_{2,n} \\\\
+                \\vdots            & \\vdots            & \\ddots & \\vdots \\\\
+                \\text{SLEM}_{m,1} & \\text{SLEM}_{m,2} & \\dots  & \\text{SLEM}_{m,n}
+        \\end{bmatrix} \\\\
+        \\mathbf{SL} &=
+        \\begin{bmatrix}
+                \\text{SL}_{1} \\\\
+                \\text{SL}_{2} \\\\
+                \\vdots        \\\\
+                \\text{SL}_{m}
+        \\end{bmatrix}
+    \\end{split}
 
 Example
 ~~~~~~~
 For a given model, we can have a matrix of secondary loss
 probabilities. Each row can represent a simulation and each column can
-represent a loss type. In this example below we have three different 
-probability columns for different types of probability loss. E.g. the 
+represent a loss type. In this example below we have three different
+probability columns for different types of probability loss. E.g. the
 probabilities of loss for simulation 1 are 0.95, 0.05, and 1.00.
 
 +------------+-------------+--------------+--------------+
