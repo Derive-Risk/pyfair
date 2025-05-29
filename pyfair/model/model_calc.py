@@ -13,16 +13,17 @@ class FairCalculations(object):
     3) a multiplication function.
 
     """
+
     def __init__(self):
         # Lookup table for functions (no leaf nodes required)
         self._function_dict = {
-            'Risk'                  : self._calculate_multiplication,
-            'Loss Event Frequency'  : self._calculate_multiplication,
-            'Threat Event Frequency': self._calculate_multiplication,
-            'Vulnerability'         : self._calculate_step_average,
-            'Loss Magnitude'        : self._calculate_addition,
-            'Primary Loss'          : self._calculate_multiplication,
-            'Secondary Loss'        : self._calculate_multiplication,
+            "Risk": self._calculate_multiplication,
+            "Loss Event Frequency": self._calculate_multiplication,
+            "Threat Event Frequency": self._calculate_multiplication,
+            "Vulnerability": self._calculate_step_average,
+            "Loss Magnitude": self._calculate_addition,
+            "Primary Loss": self._calculate_multiplication,
+            "Secondary Loss": self._calculate_multiplication,
         }
 
     def calculate(self, parent_name, child_1_data, child_2_data):
@@ -58,22 +59,11 @@ class FairCalculations(object):
         return calculated_result
 
     def _calculate_step_average(self, child_1_data, child_2_data):
-        """Get bool series based on step function, then average for vuln"""
+        """Return per-simulation boolean (as float) for Vulnerability: 1.0 if TC > CS, else 0.0"""
         # Get Trues (1) where child_2 (TCap) is greater than child_1 (CS)
-        # Otherwise False (0)
-        bool_series = child_1_data < child_2_data
-        # Treat those bools as 1 and 0 and get mean
-        bool_scalar_average = bool_series.mean()
-        # Create a long array of that mean
-        vuln_data = np.full(
-            len(bool_series),
-            bool_scalar_average
-        )
-        # And put it in a series
-        vuln = pd.Series(
-            data=vuln_data,
-            index=bool_series.index
-        )
+        bool_series = (child_1_data < child_2_data).astype(float)
+        # Return the per-simulation result as a Series
+        vuln = pd.Series(data=bool_series.values, index=bool_series.index)
         return vuln
 
     def _calculate_addition(self, child_1_data, child_2_data):

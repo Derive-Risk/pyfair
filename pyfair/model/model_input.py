@@ -29,26 +29,32 @@ class FairDataInput(object):
     is stored when converting to JSON or another serialization format.
 
     """
+
     def __init__(self):
         # These targets must be less than or equal to one
-        self._le_1_targets = ['Probability of Action', 'Vulnerability', 'Control Strength', 'Threat Capability']
-        self._le_1_keywords = ['constant', 'high', 'mode', 'low', 'mean']
+        self._le_1_targets = [
+            "Probability of Action",
+            "Vulnerability",
+            "Control Strength",
+            "Threat Capability",
+        ]
+        self._le_1_keywords = ["constant", "high", "mode", "low", "mean"]
         # Parameter map associates parameters with functions
         self._parameter_map = {
-            'constant': self._gen_constant,
-            'high'    : self._gen_pert,
-            'mode'    : self._gen_pert,
-            'low'     : self._gen_pert,
-            'gamma'   : self._gen_pert,
-            'mean'    : self._gen_normal,
-            'stdev'   : self._gen_normal,
+            "constant": self._gen_constant,
+            "high": self._gen_pert,
+            "mode": self._gen_pert,
+            "low": self._gen_pert,
+            "gamma": self._gen_pert,
+            "mean": self._gen_normal,
+            "stdev": self._gen_normal,
         }
         # List of keywords with function keys
         self._required_keywords = {
-            self._gen_constant: ['constant'],
-            self._gen_pert    : ['low', 'mode', 'high'],
-            self._gen_normal  : ['mean', 'stdev'],
-        }  
+            self._gen_constant: ["constant"],
+            self._gen_pert: ["low", "mode", "high"],
+            self._gen_normal: ["mean", "stdev"],
+        }
         # Storage of inputs
         self._supplied_values = {}
 
@@ -59,7 +65,7 @@ class FairDataInput(object):
         -------
         dict
             A dictionary of the values supplied to generate function. The
-            keys for the dict will be the target node as a string (e.g. 
+            keys for the dict will be the target node as a string (e.g.
             'Loss Event Frequency') and the values will be a sub-dictionary
             of keyword arguments ({'low': 50, 'mode}: 51, 'high': 52}).
 
@@ -80,7 +86,11 @@ class FairDataInput(object):
                     pass
                 # If not, raise error
                 else:
-                    raise FairException('"{}" must have "{}" value between zero and one.'.format(target, key))
+                    raise FairException(
+                        '"{}" must have "{}" value between zero and one.'.format(
+                            target, key
+                        )
+                    )
 
     def _check_parameters(self, target_function, **kwargs):
         """Runs parameter checks
@@ -94,7 +104,7 @@ class FairDataInput(object):
         for keyword, value in kwargs.items():
             # Two conditions
             value_is_less_than_zero = value < 0
-            keyword_is_relevant = keyword in ['mean', 'constant', 'low', 'mode', 'high']
+            keyword_is_relevant = keyword in ["mean", "constant", "low", "mode", "high"]
             # Test conditions
             if keyword_is_relevant and value_is_less_than_zero:
                 raise FairException('"{}" is less than zero.'.format(keyword))
@@ -104,7 +114,11 @@ class FairDataInput(object):
             if required_keyword in kwargs.keys():
                 pass
             else:
-                raise FairException('"{}" is missing "{}".'.format(str(target_function), required_keyword))
+                raise FairException(
+                    '"{}" is missing "{}".'.format(
+                        str(target_function), required_keyword
+                    )
+                )
 
     def generate(self, target, count, **kwargs):
         """Executes request, records parameters, and return random values
@@ -123,7 +137,7 @@ class FairDataInput(object):
             The number of random numbers generated (or alternatively, the
             length of the Series returned).
         **kwargs
-            Keyword arguments with one of the following values: {`mean`, 
+            Keyword arguments with one of the following values: {`mean`,
             `stdev`, `low`, `mode`, `high`, `gamma`, or `constant`}.
 
         Raises
@@ -146,8 +160,8 @@ class FairDataInput(object):
         result = self._generate_single(target, count, **kwargs)
         # Explicitly insert optional keywords for model storage
         dict_keys = kwargs.keys()
-        if 'low' in dict_keys and 'gamma' not in dict_keys:
-            kwargs['gamma'] = 4
+        if "low" in dict_keys and "gamma" not in dict_keys:
+            kwargs["gamma"] = 4
         # Record and return
         self._supplied_values[target] = {**kwargs}
         return result
@@ -192,16 +206,16 @@ class FairDataInput(object):
 
             {
                 'Reputational': {
-                    'Secondary Loss Event Frequency': {'constant': 4000}, 
+                    'Secondary Loss Event Frequency': {'constant': 4000},
                     'Secondary Loss Event Magnitude': {
                         'low': 10, 'mode': 20, 'high': 100
                     },
                 },
                 'Legal': {
-                    'Secondary Loss Event Frequency': {'constant': 2000}, 
+                    'Secondary Loss Event Frequency': {'constant': 2000},
                     'Secondary Loss Event Magnitude': {
                         'low': 10, 'mode': 20, 'high': 100
-                    },   
+                    },
                 }
             }
 
@@ -242,7 +256,7 @@ class FairDataInput(object):
 
         """
         # Remove prefix from target
-        final_target = prefixed_target.lstrip('multi_')
+        final_target = prefixed_target.lstrip("multi_")
         # Create a container for dataframes
         df_dict = {target: pd.DataFrame() for target in kwargs_dict.keys()}
         # For each target
@@ -255,9 +269,9 @@ class FairDataInput(object):
                 # Put in dict
                 df_dict[target][column] = s
         # Get partial secondary losses and sum up all the values
-        summed = np.sum(df.prod(axis=1) for df in df_dict.values())
+        summed = sum(df.prod(axis=1) for df in df_dict.values())
         # Record params
-        new_target = 'multi_' + final_target
+        new_target = "multi_" + final_target
         self._supplied_values[new_target] = kwargs_dict
         return summed
 
@@ -294,12 +308,12 @@ class FairDataInput(object):
             s = pd.Series(clean_array)
         # Check numeric and not null
         if s.isnull().any():
-            raise FairException('Supplied data contains null values')
+            raise FairException("Supplied data contains null values")
         # Ensure values are appropriate
         if target in self._le_1_targets:
             if s.max() > 1 or s.min() < 0:
-                raise FairException(f'{target} data greater or less than one')
-        self._supplied_values[target] = {'raw': s.values.tolist()}
+                raise FairException(f"{target} data greater or less than one")
+        self._supplied_values[target] = {"raw": s.values.tolist()}
         return s.values
 
     def _determine_func(self, **kwargs):
@@ -309,24 +323,22 @@ class FairDataInput(object):
             if key not in self._parameter_map.keys():
                 raise FairException('"{}"" is not a recognized keyword'.format(key))
         # Check whether all keys go to same function via set comprension
-        functions = list(set([
-            self._parameter_map[key]
-            for key
-            in kwargs.keys()
-        ]))
+        functions = list(set([self._parameter_map[key] for key in kwargs.keys()]))
         if len(functions) > 1:
-            raise FairException('"{}" mixes incompatible keywords.'.format(str(kwargs.keys())))
+            raise FairException(
+                '"{}" mixes incompatible keywords.'.format(str(kwargs.keys()))
+            )
         else:
             function = functions[0]
             return function
 
     def _gen_constant(self, count, **kwargs):
         """Generates constant array of size `count`"""
-        return np.full(count, kwargs['constant'])
+        return np.full(count, kwargs["constant"])
 
     def _gen_normal(self, count, **kwargs):
         """Geneates random normally-distributed array of size `count`"""
-        normal = scipy.stats.norm(loc=kwargs['mean'], scale=kwargs['stdev'])
+        normal = scipy.stats.norm(loc=kwargs["mean"], scale=kwargs["stdev"])
         rvs = normal.rvs(count)
         return rvs
 
@@ -340,10 +352,12 @@ class FairDataInput(object):
     def _check_pert(self, **kwargs):
         """Does the work of ensuring BetaPert distribution is valid"""
         conditions = {
-            'mode >= low'  : kwargs['mode'] >= kwargs['low'],
-            'high >= mode' : kwargs['high'] >= kwargs['mode'],
+            "mode >= low": kwargs["mode"] >= kwargs["low"],
+            "high >= mode": kwargs["high"] >= kwargs["mode"],
         }
         for condition_name, condition_value in conditions.items():
             if condition_value == False:
-                err = 'Param "{}" fails PERT requirement "{}".'.format(kwargs, condition_name)
+                err = 'Param "{}" fails PERT requirement "{}".'.format(
+                    kwargs, condition_name
+                )
                 raise FairException(err)

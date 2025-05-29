@@ -1,4 +1,5 @@
 """Script to create and run a test suite."""
+
 import pathlib
 import sys
 import unittest
@@ -54,16 +55,17 @@ test_modules = [
     utility.test_fair_exception,
 ]
 
-# Create loader and suite
-loader = unittest.TestLoader()
-suite = unittest.TestSuite()
+if __name__ == "__main__":
+    # Create loader and suite
+    loader = unittest.TestLoader()
+    suite = unittest.TestSuite()
 
-# Add to suite
-for test_module in test_modules:
-    loaded_test = loader.loadTestsFromModule(test_module)
-    suite.addTest(loaded_test)
+    # Add to suite
+    for test_module in test_modules:
+        loaded_test = loader.loadTestsFromModule(test_module)
+        suite.addTest(loaded_test)
 
-# Create runner and run
-runner = unittest.TextTestRunner(verbosity=5)
-result = runner.run(suite)
-sys.exit(0 if result.wasSuccessful() else 1)
+    # Create runner and run
+    runner = unittest.TextTestRunner(verbosity=5)
+    result = runner.run(suite)
+    sys.exit(0 if result.wasSuccessful() else 1)
