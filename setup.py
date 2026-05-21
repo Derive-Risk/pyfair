@@ -18,7 +18,7 @@ setup(
         "Open FAIR" is a trademark of the Open Group.
 
     """,
-    author="Derive Risk",
+    author="Derive",
     author_email="pyfair@hivesystems.com",
     packages=[
         "pyfair",
