@@ -262,7 +262,7 @@ class FairBaseReport(object):
         risk_results = risk_results.agg(["mean", "std", "min", "max"])
         risk_results.index = ["Mean", "Stdev", "Minimum", "Maximum"]
         # Format risk results into dataframe
-        overview_df = risk_results.applymap(
+        overview_df = risk_results.map(
             lambda x: self._format_strings["Risk"].format(x)
         )
         overview_df.loc["Simulations"] = [
@@ -321,7 +321,7 @@ class FairBaseReport(object):
             # On a column basis
             axis=1,
         )
-        param_df = param_df.applymap(lambda x: "" if "nan" in x else x)
+        param_df = param_df.map(lambda x: "" if "nan" in x else x)
         # Do not truncate our base64 images.
         pd.set_option("display.max_colwidth", None)
         # Create our distribution icons as strings in table
