@@ -19,7 +19,7 @@ setup(
 
     """,
     author="Derive",
-    author_email="pyfair@hivesystems.com",
+    author_email="pyfair@deriverisk.com",
     packages=[
         "pyfair",
         "pyfair.model",
