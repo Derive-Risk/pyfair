@@ -19,13 +19,13 @@ sys.path.insert(0, os.path.abspath('../'))
 # -- Project information -----------------------------------------------------
 
 project = 'pyfair'
-copyright = '2023, Hive Systems, LLC'
-author = 'Hive Systems'
+copyright = '2023-2026, Quant LLC'
+author = 'Derive'
 
 # The short X.Y version
-version = '0.1.12'
+version = '0.1.14'
 # The full version, including alpha/beta/rc tags
-release = '0.1-alpha.12'
+release = '0.1-alpha.14'
 
 
 # -- General configuration ---------------------------------------------------
@@ -137,7 +137,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'pyfair.tex', 'pyfair Documentation',
-     'Hive Systems', 'manual'),
+     'Derive', 'manual'),
 ]
 
 

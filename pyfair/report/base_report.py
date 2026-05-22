@@ -22,6 +22,14 @@ from ..model.meta_model import FairMetaModel
 from ..utility.beta_pert import FairBetaPert
 
 
+def _dataframe_elementwise(df, func):
+    """Element-wise transform; pandas 2.1+ uses map, older uses applymap."""
+    applymap = getattr(df, "applymap", None)
+    if applymap is not None:
+        return applymap(func)
+    return df.map(func)
+
+
 class FairBaseReport(object):
     """A base class for creating FairModel and FairMetaModel reports
 
@@ -262,8 +270,8 @@ class FairBaseReport(object):
         risk_results = risk_results.agg(["mean", "std", "min", "max"])
         risk_results.index = ["Mean", "Stdev", "Minimum", "Maximum"]
         # Format risk results into dataframe
-        overview_df = risk_results.applymap(
-            lambda x: self._format_strings["Risk"].format(x)
+        overview_df = _dataframe_elementwise(
+            risk_results, lambda x: self._format_strings["Risk"].format(x)
         )
         overview_df.loc["Simulations"] = [
             "{0:,.0f}".format(len(model.export_results()))
@@ -321,7 +329,9 @@ class FairBaseReport(object):
             # On a column basis
             axis=1,
         )
-        param_df = param_df.applymap(lambda x: "" if "nan" in x else x)
+        param_df = _dataframe_elementwise(
+            param_df, lambda x: "" if "nan" in x else x
+        )
         # Do not truncate our base64 images.
         pd.set_option("display.max_colwidth", None)
         # Create our distribution icons as strings in table
